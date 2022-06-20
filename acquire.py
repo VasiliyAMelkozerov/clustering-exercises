@@ -61,8 +61,12 @@ def traintestsplit(df):
     # 30% of 80% for validate
     return train, validate, test
 
-#this is a copy to trouble shoot code
 def takeout_outliers1(df):
+    """
+    This code simulatiounsly handles outliers that while skew my machine learning model
+    as well as focous in on the upper and lower IQR of the original dataframe
+    This takes out some of the left over nulls but not all
+    """
          #this code properly sets a data ceiling
     df = df[(df.logerror <= 2.5) & (df.logerror >= -2.5)]
         #this sets the upper threshold to cut off to handle outliers
@@ -86,12 +90,12 @@ def handle_missing_values(df, prop_required_column, prop_required_row):
 def splitmoreways(train, 
                validate, 
                test, 
-               columns_to_scale=['propertylandusetypeid', 'bathroomcnt', 'bedroomcnt',
+               columns_to_scale=['bathroomcnt', 'bedroomcnt',
        'calculatedbathnbr', 'calculatedfinishedsquarefeet',
        'finishedsquarefeet12', 'fullbathcnt', 'latitude', 'longitude',
        'lotsizesquarefeet', 'rawcensustractandblock',
         'roomcnt', 'yearbuilt',
-       'structuretaxvaluedollarcnt', 'taxvaluedollarcnt', 'assessmentyear',
+       'structuretaxvaluedollarcnt', 'taxvaluedollarcnt',
        'landtaxvaluedollarcnt', 'taxamount', 'censustractandblock'],
                return_scaler=False):
     '''
@@ -128,3 +132,11 @@ def splitmoreways(train,
         return scaler, train_scaled, validate_scaled, test_scaled
     else:
         return train_scaled, validate_scaled, test_scaled
+
+def drop_cat_columns(df):
+    #i am building this code so that I can clean up my work area and possibly use again
+    df = df.drop(columns=["parcelid","id","fips",
+                    "propertycountylandusecode",
+                    "regionidcity","regionidzip","transactiondate","propertylandusedesc","regionidcounty",
+                   "assessmentyear","propertylandusetypeid"])
+    return df
